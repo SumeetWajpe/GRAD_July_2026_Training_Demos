@@ -70,18 +70,48 @@ public class App {
 
         // Arrays
 
-        double[] deposits = {
-            12000,5000,3000,15000,9000
-        };
+        // double[] deposits = {
+        //     12000,5000,3000,15000,9000
+        // };
 
-        double total = 0;
-        // for(int i =0;i<deposits.length;i++){
-        //     total+= deposits[i];
+        // double total = 0;
+        // // for(int i =0;i<deposits.length;i++){
+        // //     total+= deposits[i];
+        // // }
+        // for(double amount : deposits){
+        //     total+=amount;
         // }
-        for(double amount : deposits){
-            total+=amount;
+        // System.out.println("Total Balance : " + total);
+
+        // double highest = deposits[0];
+        // for(double amount : deposits){
+        //     if(amount > highest){
+        //         highest = amount;
+        //     }
+        // }
+
+        // System.out.println("Highest Deposit = " + highest);
+
+        // 2D Arrays
+        // double[][] deposits = {
+        //     {12000,30000,4000},
+        //     {30000,2000,4000},
+        //     {3000,3000,8000}
+        // };
+
+
+        // jagged Array
+        int[][] jaggedArray = {
+            {1,2},
+            {20,30,40,50},
+            {7}
+    };
+
+    for(int i = 0;i < jaggedArray.length;i++){
+        for(int j=0;j< jaggedArray[i].length;j++){
+            System.out.println(jaggedArray[i][j] + " ");
         }
-        System.out.println("Total Balance : " + total);
+    }
 
     }
 }
