@@ -7,8 +7,8 @@ public class Car{
             this.speed = speed;
     }
 
-    public void accelerate(){
-        System.out.println("The car " + name + " is running at " + speed + " kmph !");
+    public String accelerate(){
+        return ("The car " + name + " is running at " + speed + " kmph !");
     }
 
 } 

@@ -8,7 +8,7 @@ public class App {
             System.out.println(carObj.name);
 
             JamesBondCar jbc = new JamesBondCar("Aston Martin",300,true,true);
-            
+            System.out.println( jbc.accelerate());
 
         }
 }

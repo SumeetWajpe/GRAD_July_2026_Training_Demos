@@ -6,4 +6,9 @@ public class JamesBondCar extends Car {
         this.canFly = canFly;
         this.isArmed = isArmed;
     }
+
+    @Override
+    public String accelerate(){
+        return ( super.accelerate() +  "Can it fly ? " + this.canFly);
+    }
 }
