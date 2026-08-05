@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprint Challenge — Self-Assessment</title>
+<style>
+  :root{
+    --ink:#101826;
+    --navy:#16253D;
+    --slate:#3C5878;
+    --paper:#F5F3EE;
+    --card:#FFFFFF;
+    --line:#E1DED4;
+    --amber:#C8862E;
+    --amber-soft:#F1DCB8;
+    --good:#3E7A5B;
+    --mid:#C8862E;
+    --low:#B4472A;
+    --shadow: 0 1px 2px rgba(16,24,38,.06), 0 8px 24px -12px rgba(16,24,38,.18);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+
+  @font-face{
+    font-family:'SG';
+    src:local('Space Grotesk');
+  }
+
+  .wrap{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  header.top{
+    margin-bottom: 36px;
+  }
+  .eyebrow{
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  h1{
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+    color: var(--navy);
+  }
+  .sub{
+    color:#5B6674;
+    font-size: 15px;
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  .picker{
+    margin-top: 28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:flex-end;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .field label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--slate);
+    letter-spacing:.03em;
+  }
+  select, input[type=text]{
+    font-family:inherit;
+    font-size:15px;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    min-width:260px;
+  }
+  select:focus, input:focus, button:focus, .item input:focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  /* Scorecard */
+  .scorecard{
+    margin-top:34px;
+    background:var(--navy);
+    color:#fff;
+    border-radius:16px;
+    padding:26px 28px;
+    display:grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items:center;
+    box-shadow: var(--shadow);
+  }
+  .total-num{
+    font-family:"Space Grotesk", serif;
+    font-size:56px;
+    font-weight:700;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .total-num span{
+    font-size:22px;
+    font-weight:500;
+    color:#B9C4D6;
+  }
+  .total-label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:#93A2BA;
+    margin-top:6px;
+  }
+  .bars{
+    display:grid;
+    gap:10px;
+  }
+  .bar-row{
+    display:grid;
+    grid-template-columns: 210px 1fr 30px;
+    align-items:center;
+    gap:12px;
+    font-size:13px;
+  }
+  .bar-track{
+    height:8px;
+    background: rgba(255,255,255,.14);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:6px;
+    background: var(--amber);
+    width:0%;
+    transition: width .25s ease;
+  }
+
+  /* Criteria cards */
+  .criteria{
+    margin-top:38px;
+    display:grid;
+    gap:18px;
+  }
+  .crit-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow: var(--shadow);
+  }
+  .crit-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:18px 20px;
+    border-bottom:1px solid var(--line);
+    background: linear-gradient(180deg, #FBFAF7, #F5F3EE);
+  }
+  .crit-title{
+    font-family:"Space Grotesk", sans-serif;
+    font-size:17px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .crit-score{
+    font-variant-numeric: tabular-nums;
+    font-weight:700;
+    font-size:15px;
+    padding: 5px 12px;
+    border-radius:999px;
+    background: var(--amber-soft);
+    color:#7A4E17;
+    white-space:nowrap;
+  }
+  ul.items{
+    list-style:none;
+    margin:0;
+    padding: 6px 8px;
+  }
+  .item{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:12px 12px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+  .item:hover{ background: #FAF8F2; }
+  .item input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    min-width:20px;
+    margin-top:1px;
+    border-radius:6px;
+    border:1.6px solid #BFC6D1;
+    background:#fff;
+    display:grid;
+    place-content:center;
+    cursor:pointer;
+  }
+  .item input::after{
+    content:"";
+    width:11px;
+    height:11px;
+    border-radius:3px;
+    background:var(--amber);
+    transform:scale(0);
+    transition: transform .12s ease;
+  }
+  .item input:checked{
+    border-color:var(--amber);
+  }
+  .item input:checked::after{
+    transform:scale(1);
+  }
+  .item-text{
+    font-size:14.5px;
+    color:#2B3444;
+  }
+
+  footer.actions{
+    margin-top:32px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    padding:11px 18px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--navy);
+    cursor:pointer;
+  }
+  button.primary{
+    background:var(--navy);
+    color:#fff;
+    border-color:var(--navy);
+  }
+  button:active{ transform: translateY(1px); }
+
+  .copy-msg{
+    font-size:13px;
+    color:var(--good);
+    margin-top:10px;
+    display:none;
+  }
+
+  .empty-hint{
+    font-size:13px;
+    color:#8A93A3;
+    padding:16px 20px;
+  }
+
+  @media (max-width:640px){
+    .scorecard{ grid-template-columns:1fr; }
+    .bar-row{ grid-template-columns: 120px 1fr 26px; }
+    select, input[type=text]{ min-width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <p class="eyebrow">Engineering Sprint Challenge · July 2026</p>
+    <h1>Rate your own sprint</h1>
+    <p class="sub">Go through each item honestly and check the ones that describe your team's work this sprint. Your scores update as you go — nothing is saved or sent until you copy your summary at the bottom.</p>
+  </header>
+
+  <div class="picker">
+    <div class="field">
+      <label for="team">Your team</label>
+      <select id="team"></select>
+    </div>
+    <div class="field">
+      <label for="name">Your name <span style="font-weight:400;color:#9AA3B0;">(optional)</span></label>
+      <input type="text" id="name" placeholder="e.g. Raghav Lathi">
+    </div>
+  </div>
+
+  <section class="scorecard">
+    <div>
+      <div class="total-num" id="totalNum">0<span>/20</span></div>
+      <div class="total-label">Total score</div>
+    </div>
+    <div class="bars" id="barRows"></div>
+  </section>
+
+  <section class="criteria" id="criteria"></section>
+
+  <footer class="actions">
+    <button class="primary" id="copyBtn">Copy my summary</button>
+    <button id="resetBtn">Reset checklist</button>
+  </footer>
+  <p class="copy-msg" id="copyMsg">Summary copied — paste it into an email or chat to your assessor.</p>
+
+</div>
+
+<script>
+const TEAMS = [
+  "PAYMENT PROCESSING","RUNTIME REBELS","MR. BEANS","PORTIFY","TXN SYNC",
+  "CRTL+ALT+DEFEAT","MonitorX","BeanThereDoneThat","The Reconciliators",
+  "ByteWatch","CIPHER SQUAD"
+];
+
+const CRITERIA = [
+  {
+    name: "Technical Proficiency & Dual-Skilling",
+    items: [
+      "Applies relevant technical skills effectively (Java/Spring Boot/JDBC-SQL/HTML-CSS-JS/GitHub Actions/Docker/JUnit-Mockito/Cucumber)",
+      "Shows proactive learning and upskilling outside comfort zone",
+      "Demonstrates depth of expertise in core project technologies",
+      "Switches seamlessly between technology stacks as needs evolve",
+      "Embraces dual-skilling (modern + legacy tech) with a growth mindset"
+    ]
+  },
+  {
+    name: "Solution Design & Implementation",
+    items: [
+      "Owns end-to-end solution delivery and proposes improvements",
+      "Keeps work visible (updates, demos, clear sprint goals, incremental delivery)",
+      "Produces quality code/docs using best practices (secure coding, modular design)",
+      "Uses clear branching, commit messages, PR descriptions with evidence",
+      "Incorporates feedback quickly; manages scope and timeboxes well"
+    ]
+  },
+  {
+    name: "Automation & Modernization Adoption",
+    items: [
+      "Contributes to automation, modernization, digital transformation initiatives",
+      "Uses GitHub Actions/Docker/CI-CD/GenAI-assisted testing to reduce manual effort",
+      "Shows curiosity about emerging tech and advocates modernization",
+      "Integrates automation tools/frameworks for measurable business impact",
+      "Applies AI-driven/agentic automation in unconventional or legacy areas"
+    ]
+  },
+  {
+    name: "Compliance, Security & Risk Awareness",
+    items: [
+      "Applies secure coding and regulatory/risk-aware practices",
+      "Follows HSBC security/risk conduct requirements (phishing awareness, policy adherence)",
+      "Proactively identifies and mitigates risks",
+      "Integrates security and compliance into daily work",
+      "Anticipates regulatory changes and adapts solutions accordingly"
+    ]
+  }
+];
+
+const state = CRITERIA.map(c => c.items.map(() => false));
+
+// -- populate team select --
+const teamSelect = document.getElementById('team');
+TEAMS.forEach(t=>{
+  const opt = document.createElement('option');
+  opt.value = t; opt.textContent = t;
+  teamSelect.appendChild(opt);
+});
+
+// -- build criteria cards --
+const criteriaEl = document.getElementById('criteria');
+const barRowsEl = document.getElementById('barRows');
+const scoreBadges = [];
+const barFills = [];
+
+CRITERIA.forEach((crit, ci) => {
+  const card = document.createElement('div');
+  card.className = 'crit-card';
+
+  const head = document.createElement('div');
+  head.className = 'crit-head';
+  const title = document.createElement('div');
+  title.className = 'crit-title';
+  title.textContent = crit.name;
+  const badge = document.createElement('div');
+  badge.className = 'crit-score';
+  badge.textContent = '0 / 5';
+  scoreBadges.push(badge);
+  head.appendChild(title);
+  head.appendChild(badge);
+  card.appendChild(head);
+
+  const ul = document.createElement('ul');
+  ul.className = 'items';
+  crit.items.forEach((text, ii) => {
+    const li = document.createElement('li');
+    li.className = 'item';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.addEventListener('change', () => {
+      state[ci][ii] = cb.checked;
+      update();
+    });
+    const span = document.createElement('span');
+    span.className = 'item-text';
+    span.textContent = text;
+    li.appendChild(cb);
+    li.appendChild(span);
+    li.addEventListener('click', (e) => {
+      if (e.target !== cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); }
+    });
+    ul.appendChild(li);
+  });
+  card.appendChild(ul);
+  criteriaEl.appendChild(card);
+
+  // scorecard bar row
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  const label = document.createElement('div');
+  label.textContent = crit.name;
+  const track = document.createElement('div');
+  track.className = 'bar-track';
+  const fill = document.createElement('div');
+  fill.className = 'bar-fill';
+  track.appendChild(fill);
+  barFills.push(fill);
+  const num = document.createElement('div');
+  num.style.textAlign = 'right';
+  num.textContent = '0';
+  row.appendChild(label);
+  row.appendChild(track);
+  row.appendChild(num);
+  row.dataset.numEl = '';
+  barRowsEl.appendChild(row);
+  row._numEl = num;
+});
+
+const totalNum = document.getElementById('totalNum');
+
+function update(){
+  let total = 0;
+  CRITERIA.forEach((crit, ci) => {
+    const score = state[ci].filter(Boolean).length;
+    total += score;
+    scoreBadges[ci].textContent = score + ' / 5';
+    barFills[ci].style.width = (score/5*100) + '%';
+    const row = barRowsEl.children[ci];
+    row._numEl.textContent = score;
+  });
+  totalNum.innerHTML = total + '<span>/20</span>';
+}
+update();
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.querySelectorAll('.item input[type=checkbox]').forEach(cb => cb.checked = false);
+  state.forEach(arr => arr.fill(false));
+  update();
+  document.getElementById('copyMsg').style.display = 'none';
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const team = teamSelect.value;
+  const name = document.getElementById('name').value.trim();
+  let lines = [];
+  lines.push('Sprint Challenge Self-Assessment');
+  lines.push('Team: ' + team);
+  if (name) lines.push('Name: ' + name);
+  lines.push('');
+  let total = 0;
+  CRITERIA.forEach((crit, ci) => {
+    const score = state[ci].filter(Boolean).length;
+    total += score;
+    lines.push(crit.name + ': ' + score + '/5');
+  });
+  lines.push('');
+  lines.push('Total: ' + total + '/20');
+  const text = lines.join('\n');
+
+  const msg = document.getElementById('copyMsg');
+  const done = () => { msg.style.display = 'block'; setTimeout(()=>msg.style.display='none', 4000); };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+});
+
+function fallbackCopy(text, cb){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+  cb();
+}
+</script>
+</body>
+</html>
